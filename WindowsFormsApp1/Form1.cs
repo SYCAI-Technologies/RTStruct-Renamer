@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -152,6 +153,52 @@ namespace WindowsFormsApp1
             file.Save(fileName);
             MessageBox.Show("File saved successfully.", "OK",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //abrir el dialogo que permite elegir el archivo
+            DialogResult result = this.folderBrowserDialog1.ShowDialog();
+            //si un archivo se selecciona
+            if (result == DialogResult.OK)
+            {
+                //ponemos el archivo seleccionado en la caja de texto
+                this.textBox4.Text = this.folderBrowserDialog1.SelectedPath;
+
+                string[] filesArray = Directory.GetFiles(this.textBox4.Text);
+
+
+
+                foreach (String archivo in filesArray)
+                {
+
+                    file = DicomFile.Open(archivo);
+                    try
+                    {
+                        var roiSequence = file.Dataset.GetSequence(DicomTag.StructureSetROISequence);
+                        var idPaciente = file.Dataset.GetString(DicomTag.PatientID);
+
+                        textBox5.Text += idPaciente;
+                        textBox5.AppendText(Environment.NewLine);
+                        textBox5.Text += "-----------------";
+                        textBox5.AppendText(Environment.NewLine);
+
+                        foreach (var sequence in roiSequence)
+                        {
+                            var roiName = sequence.GetString(DicomTag.ROIName);
+                            textBox5.Text += roiName + '\n';
+                            textBox5.AppendText(Environment.NewLine);
+                        }
+                        textBox5.AppendText(Environment.NewLine);
+                    }
+                    catch (FellowOakDicom.DicomDataException)
+                    {
+                        MessageBox.Show("Please make sure to select a valid RTStruct file.", "File is not valid",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                }
+            }
         }
     }
 }
