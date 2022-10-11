@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace WindowsFormsApp1
     {
         String fileName;
         DicomFile file;
+
+        List<string> validLabels = new List<string> { "PANCREAS","LIVER", "LIVER CYST", "LIVER LESION", "RIGHT KIDNEY", "RIGHT KIDNEY LESION", "RIGHT KIDNEY CYST","LEFT KIDNEY","LEFT KIDNEY LESION","LEFT KIDNEY CYST","ADK","TS","TNEND","NPMI","IPMN","MCN","NQM","PSEUDOCYST","CAS","SCA","NSP","QS"};
+        List<string> errorCount = new List<string> { };
 
         public Form1()
         {
@@ -165,38 +169,81 @@ namespace WindowsFormsApp1
                 //ponemos el archivo seleccionado en la caja de texto
                 this.textBox4.Text = this.folderBrowserDialog1.SelectedPath;
 
-                string[] filesArray = Directory.GetFiles(this.textBox4.Text);
+                IEnumerable<string> filesArray = Directory.EnumerateFiles(this.textBox4.Text, "*.dcm", SearchOption.AllDirectories);
 
 
+                List<string> estudios = new List<string> { };
 
                 foreach (String archivo in filesArray)
                 {
-
+                    Debug.WriteLine(archivo);
                     file = DicomFile.Open(archivo);
-                    try
-                    {
-                        var roiSequence = file.Dataset.GetSequence(DicomTag.StructureSetROISequence);
-                        var idPaciente = file.Dataset.GetString(DicomTag.PatientID);
 
-                        textBox5.Text += idPaciente;
-                        textBox5.AppendText(Environment.NewLine);
-                        textBox5.Text += "-----------------";
-                        textBox5.AppendText(Environment.NewLine);
-
-                        foreach (var sequence in roiSequence)
+                    if(file.Dataset.GetString(DicomTag.Modality) == "RTSTRUCT"){
+                        try
                         {
-                            var roiName = sequence.GetString(DicomTag.ROIName);
-                            textBox5.Text += roiName + '\n';
+                            var roiSequence = file.Dataset.GetSequence(DicomTag.StructureSetROISequence);
+                            var idPaciente = file.Dataset.GetString(DicomTag.PatientID);
+
+                            textBox5.Text += idPaciente;
+                            textBox5.AppendText(Environment.NewLine);
+                            textBox5.Text += "-----------------";
+                            textBox5.AppendText(Environment.NewLine);
+
+                            foreach (var sequence in roiSequence)
+                            {
+                                var roiName = sequence.GetString(DicomTag.ROIName);
+
+                                if (!validLabels.Any(roiName.Contains))
+                                {
+                                    errorCount.Add(idPaciente);
+                                }
+
+                                textBox5.Text += roiName + '\n';
+                                textBox5.AppendText(Environment.NewLine);
+                            }
                             textBox5.AppendText(Environment.NewLine);
                         }
-                        textBox5.AppendText(Environment.NewLine);
+                        catch (FellowOakDicom.DicomDataException)
+                        {
+                            MessageBox.Show("Please make sure to select a valid RTStruct file.", "File is not valid",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-                    catch (FellowOakDicom.DicomDataException)
+                    else
                     {
-                        MessageBox.Show("Please make sure to select a valid RTStruct file.", "File is not valid",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
 
+                        //DateTime fechaEstudio = file.Dataset.GetSingleValue<DateTime>(DicomTag.StudyDate);
+                        //textBox5.Text += fechaEstudio.ToString();
+
+                        string UIDEstudio = file.Dataset.GetSingleValue<string>(DicomTag.StudyInstanceUID);
+
+                        
+
+                        if (!estudios.Contains(UIDEstudio))
+                        {
+                            estudios.Add(UIDEstudio);
+                            Directory.CreateDirectory(this.textBox4.Text+"\\"+UIDEstudio);
+                        }
+                        else
+                        {
+                            if (!File.Exists(this.textBox4.Text + "\\" + UIDEstudio + "\\" + Path.GetFileName(archivo)))
+                            {
+                                File.Copy(archivo, this.textBox4.Text + "\\" + UIDEstudio + "\\" + Path.GetFileName(archivo), true);
+                            }
+                            
+                        }
+
+                        //textBox5.Text += UIDEstudio;
+                        //textBox5.AppendText(Environment.NewLine);
+                        //textBox5.Text += "-----------------";
+                        //textBox5.AppendText(Environment.NewLine);
+                        
+                    }
+                }
+                foreach (String error in errorCount)
+                {
+                    textBox5.Text += "***ERROR: patient:" + error + "***";
                 }
             }
         }
