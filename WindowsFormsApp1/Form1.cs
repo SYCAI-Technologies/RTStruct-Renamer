@@ -161,6 +161,10 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
+            folderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop;
+            folderBrowserDialog1.SelectedPath = @"\\192.168.1.59\tooltest";
+            
+            
             //abrir el dialogo que permite elegir el archivo
             DialogResult result = this.folderBrowserDialog1.ShowDialog();
             //si un archivo se selecciona
