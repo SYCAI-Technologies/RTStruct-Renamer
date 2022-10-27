@@ -38,7 +38,12 @@
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
+            this.btn_abrir_local = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.labelTitulo = new System.Windows.Forms.Label();
+            this.btnCancelar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -75,7 +80,7 @@
             // btn_abrir_carpeta
             // 
             this.btn_abrir_carpeta.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_abrir_carpeta.Location = new System.Drawing.Point(314, 531);
+            this.btn_abrir_carpeta.Location = new System.Drawing.Point(314, 508);
             this.btn_abrir_carpeta.Name = "btn_abrir_carpeta";
             this.btn_abrir_carpeta.Size = new System.Drawing.Size(901, 23);
             this.btn_abrir_carpeta.TabIndex = 3;
@@ -87,7 +92,7 @@
             // 
             this.btn_subir_carpeta.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btn_subir_carpeta.Enabled = false;
-            this.btn_subir_carpeta.Location = new System.Drawing.Point(314, 508);
+            this.btn_subir_carpeta.Location = new System.Drawing.Point(314, 485);
             this.btn_subir_carpeta.Name = "btn_subir_carpeta";
             this.btn_subir_carpeta.Size = new System.Drawing.Size(901, 23);
             this.btn_subir_carpeta.TabIndex = 4;
@@ -103,10 +108,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(314, 485);
+            this.progressBar1.Location = new System.Drawing.Point(42, 83);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(901, 23);
+            this.progressBar1.Size = new System.Drawing.Size(889, 23);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 5;
             // 
@@ -119,21 +123,65 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label1.Location = new System.Drawing.Point(314, 470);
+            this.label1.Location = new System.Drawing.Point(36, 44);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 15);
             this.label1.TabIndex = 6;
+            // 
+            // btn_abrir_local
+            // 
+            this.btn_abrir_local.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btn_abrir_local.Location = new System.Drawing.Point(314, 531);
+            this.btn_abrir_local.Name = "btn_abrir_local";
+            this.btn_abrir_local.Size = new System.Drawing.Size(901, 23);
+            this.btn_abrir_local.TabIndex = 7;
+            this.btn_abrir_local.Text = "Abrir Carpeta Local";
+            this.btn_abrir_local.UseVisualStyleBackColor = true;
+            this.btn_abrir_local.Click += new System.EventHandler(this.btn_abrir_local_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.labelTitulo);
+            this.panel2.Controls.Add(this.btnCancelar);
+            this.panel2.Controls.Add(this.progressBar1);
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Location = new System.Drawing.Point(278, 182);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(974, 203);
+            this.panel2.TabIndex = 8;
+            this.panel2.Visible = false;
+            // 
+            // labelTitulo
+            // 
+            this.labelTitulo.AutoSize = true;
+            this.labelTitulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelTitulo.Location = new System.Drawing.Point(383, 15);
+            this.labelTitulo.Name = "labelTitulo";
+            this.labelTitulo.Size = new System.Drawing.Size(93, 21);
+            this.labelTitulo.TabIndex = 8;
+            this.labelTitulo.Text = "labelTitulo";
+            this.labelTitulo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // btnCancelar
+            // 
+            this.btnCancelar.Location = new System.Drawing.Point(453, 145);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelar.TabIndex = 7;
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1446, 554);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.btn_subir_carpeta);
             this.Controls.Add(this.btn_abrir_carpeta);
+            this.Controls.Add(this.btn_abrir_local);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.treeView1);
@@ -141,8 +189,9 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -158,5 +207,9 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private FolderBrowserDialog folderBrowserDialog1;
         private Label label1;
+        private Button btn_abrir_local;
+        private Panel panel2;
+        private Button btnCancelar;
+        private Label labelTitulo;
     }
 }
