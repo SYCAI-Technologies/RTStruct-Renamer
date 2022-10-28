@@ -29,7 +29,7 @@ namespace RTLabelEditor
         string subirRuta = @"\\192.168.1.59\tooltest\Hospitales\00_PARA SUBIR";
 
         //La lista con las etiquetas correctas
-        List<string> validLabels = new List<string> { "PANCREAS", "LIVER", "LIVER CYST", "LIVER LESION", "RIGHT KIDNEY", "RIGHT KIDNEY LESION", "RIGHT KIDNEY CYST", "LEFT KIDNEY", "LEFT KIDNEY LESION", "LEFT KIDNEY CYST", "ADK", "TS", "TNEND", "NPMI", "MCN", "NQM", "PSEUDOCYST", "CAS", "SCA", "NSP", "QS" };
+        List<string> validLabels = new List<string> { "PANCREAS", "LIVER", "LIVER CYST", "LIVER LESION", "RIGHT KIDNEY", "RIGHT KIDNEY LESION", "RIGHT KIDNEY CYST", "LEFT KIDNEY", "LEFT KIDNEY LESION", "LEFT KIDNEY CYST", "ADK", "TS", "TNEND", "NPMI", "MCN", "NQM", "PSEUDOCYST", "CAS", "SCA", "NSP", "QS" ,"IPMN"};
 
         //lista de archivos a borrar si el usuario cancela la subida
         List<string> archivosParaBorrar = new List<string> { };
@@ -170,6 +170,7 @@ namespace RTLabelEditor
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.MultiSelect = false;
             dataGridView1.RowHeadersVisible = false;
+            dataGridView1.AllowUserToDeleteRows = false;
 
 
             DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
@@ -431,7 +432,7 @@ namespace RTLabelEditor
             panel1.Controls.Add(TBox);
             vertPos += 30;
 
-            //patientid label
+            //etiqueta label
             Label labEtiqueta = new Label();
             labEtiqueta.Text = "Labels";
             labEtiqueta.Font = new Font(labEtiqueta.Font, FontStyle.Bold);
@@ -595,7 +596,7 @@ namespace RTLabelEditor
                         Directory.Delete(archivo, true);
                     }
                 }
-
+                archivosParaBorrar.Clear();
                 MessageBox.Show("Operacion de subida cancelada");
             }
 
